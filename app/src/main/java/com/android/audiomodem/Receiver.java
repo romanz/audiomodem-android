@@ -33,7 +33,8 @@ public class Receiver extends AsyncTask<Void, Void, String> {
 
     final static int sampleRate = Config.sampleRate;
 
-    final static int sourceId = MediaRecorder.AudioSource.MIC;
+    // Hoping this will disable AGC and other pre-processing on the incoming audio...
+    final static int sourceId = MediaRecorder.AudioSource.VOICE_RECOGNITION;
     final static String TAG = "Receiver";
 
     private ArrayList<short[]> buffers = new ArrayList<>();
