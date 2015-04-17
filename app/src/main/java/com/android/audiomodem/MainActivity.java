@@ -1,5 +1,6 @@
 package com.android.audiomodem;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,7 +20,18 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText = (EditText)findViewById(R.id.editText);
+
+        editText = (EditText) findViewById(R.id.editText);
+
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null && "text/plain".equals(type)) {
+            String str = intent.getStringExtra(Intent.EXTRA_TEXT);
+            editText.setText(str);
+        }
     }
 
     public void onReceive(View v) {
