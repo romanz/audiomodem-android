@@ -3,6 +3,6 @@
 
     <string name="app_name">AudioModem</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="copy_to_clip">Copy to clipboard</string>
 
 </resources>

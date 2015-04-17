@@ -25,6 +25,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:id="@+id/buttonClear"
+        android:layout_above="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClear" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
