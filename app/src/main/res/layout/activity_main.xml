@@ -10,20 +10,20 @@
         android:layout_height="wrap_content"
         android:text="Send"
         android:id="@+id/buttonSend"
-        android:layout_alignParentBottom="true"
+        android:onClick="onSend"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onSend" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recv"
         android:id="@+id/buttonRecv"
-        android:layout_alignParentBottom="true"
+        android:onClick="onReceive"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onReceive" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -31,10 +31,10 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/editText"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/buttonRecv"
-        android:layout_alignEnd="@+id/buttonRecv" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/buttonSend" />
 
 </RelativeLayout>
