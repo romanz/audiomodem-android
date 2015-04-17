@@ -14,12 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private EditText editText = null;
-    private Button buttonRecv = null;
+    private ImageButton recvBtn = null;
     private Color origColor = null;
 
     private Thread tx = null;
@@ -31,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         editText = (EditText) findViewById(R.id.editText);
-        buttonRecv = (Button) findViewById(R.id.buttonRecv);
+        recvBtn = (ImageButton) findViewById(R.id.recvBtn);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -49,10 +50,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             protected void onPostExecute(String result) {
                 editText.setText(result);
-                buttonRecv.setEnabled(true);
+                recvBtn.setEnabled(true);
             }
         };
-        buttonRecv.setEnabled(false);
+        recvBtn.setEnabled(false);
         rx.execute();
     }
 
