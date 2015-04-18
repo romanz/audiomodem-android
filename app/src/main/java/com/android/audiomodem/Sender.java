@@ -3,6 +3,7 @@ package com.android.audiomodem;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
-public class Sender extends Thread {
+public class Sender extends AsyncTask<String, Void, Void> {
 
     static class OutputBuffer implements jmodem.OutputSampleStream {
 
@@ -41,22 +42,18 @@ public class Sender extends Thread {
     final static int duration = 10;  // in seconds
 
     final static int streamType = AudioManager.STREAM_MUSIC;
-    final static String TAG = "Main";
-
-    final private byte[] data;
-
-    public Sender(byte[] msg) {
-        data = msg;
-    }
+    final static String TAG = "Sender";
 
     @Override
-    public void run() {
+    protected Void doInBackground(String... params) {
+
         final int chanFormat = AudioFormat.CHANNEL_OUT_MONO;
         final int encoding = AudioFormat.ENCODING_PCM_16BIT;
         final int mode = AudioTrack.MODE_STATIC;
         final int bufSize = AudioTrack.getMinBufferSize(sampleRate, chanFormat, encoding);
 
         OutputBuffer buf = new OutputBuffer();
+        final byte[] data = params[0].getBytes();
 
         jmodem.Sender send = new jmodem.Sender(buf);
         try {
@@ -66,7 +63,7 @@ public class Sender extends Thread {
             send.writeEOF();
         } catch (IOException e) {
             Log.e(TAG, "sending data failed", e);
-            return;
+            return null;
         }
 
         short[] samples = buf.samples();
@@ -80,15 +77,19 @@ public class Sender extends Thread {
                 mode
         );
         int n = dst.write(samples, 0, samples.length);
-        Log.d(TAG, "playing " + n + " samples");
+        long duration = n * 1000L / sampleRate; // [ms]
+        Log.d(TAG, String.format("playing {0} samples ({1} seconds)", n, duration / 1e3));
 
         dst.play();
         try {
-            sleep(n * sampleRate);
-        } catch (InterruptedException e) {}
+            Thread.sleep(duration);
+        } catch (InterruptedException e) {
+            // nothing to do
+        }
         Log.d(TAG, "Done");
         dst.stop();
         dst.release();
+        return null;
     }
 
 }

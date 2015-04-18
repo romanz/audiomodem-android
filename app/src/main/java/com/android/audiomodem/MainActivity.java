@@ -21,9 +21,10 @@ public class MainActivity extends ActionBarActivity {
 
     private EditText editText = null;
     private ImageButton recvBtn = null;
+    private ImageButton sendBtn = null;
     private Color origColor = null;
 
-    private Thread tx = null;
+    private Sender tx = null;
     private Receiver rx = null;
 
     @Override
@@ -33,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
         editText = (EditText) findViewById(R.id.editText);
         recvBtn = (ImageButton) findViewById(R.id.recvBtn);
+        sendBtn = (ImageButton) findViewById(R.id.sendBtn);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -58,9 +60,15 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onSend(View v) {
-        byte[] msg = editText.getText().toString().getBytes();
-        tx = new Sender(msg);
-        tx.start();
+        String msg = editText.getText().toString();
+        tx = new Sender() {
+            @Override
+            protected void onPostExecute(Void result) {
+                sendBtn.setEnabled(true);
+            }
+        };
+        tx.execute(msg);
+        sendBtn.setEnabled(false);
     }
 
     public void onClear(View v) {
