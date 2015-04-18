@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AudioModem</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="copy_to_clip">Copy to clipboard</string>
+    <string name="app_name">Audio MODEM</string>
+    <string name="menu_copy">Copy to clipboard</string>
+    <string name="menu_clear">Clear contents</string>
     <string name="menu_stop">Stop</string>
 
 </resources>

@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -26,7 +25,6 @@ public class MainActivity extends ActionBarActivity {
 
     private Thread tx = null;
     private Receiver rx = null;
-    private ProgressBar pBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +33,6 @@ public class MainActivity extends ActionBarActivity {
 
         editText = (EditText) findViewById(R.id.editText);
         recvBtn = (ImageButton) findViewById(R.id.recvBtn);
-        pBar = (ProgressBar) findViewById(R.id.pBar);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -54,12 +51,6 @@ public class MainActivity extends ActionBarActivity {
             protected void onPostExecute(String result) {
                 editText.setText(result);
                 recvBtn.setEnabled(true);
-            }
-
-            @Override
-            protected void onProgressUpdate(Double... values) {
-                double p = values[0];
-                pBar.setProgress((int)(p * pBar.getMax()));
             }
         };
         recvBtn.setEnabled(false);
@@ -90,12 +81,16 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.copy_to_clip) {
+        if (id == R.id.menu_copy) {
             String str = editText.getText().toString();
             ClipData clip = ClipData.newPlainText("text", str);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setPrimaryClip(clip);
+            return true;
+        }
+
+        if (id == R.id.menu_clear) {
+            editText.setText("");
             return true;
         }
 

@@ -1,8 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/copy_to_clip" android:title="@string/copy_to_clip"
+    <item android:id="@+id/menu_copy" android:title="@string/menu_copy"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/menu_clear" android:title="@string/menu_clear"
+        android:orderInCategory="101" app:showAsAction="never" />
     <item android:id="@+id/menu_stop" android:title="@string/menu_stop"
         android:orderInCategory="103" app:showAsAction="never" />
 </menu>
