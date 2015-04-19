@@ -99,6 +99,13 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+        if (id == R.id.menu_stop) {
+            if (rx != null) {
+                rx.stop();
+            }
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

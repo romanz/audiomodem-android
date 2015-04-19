@@ -6,10 +6,12 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,6 +34,8 @@ public class Receiver extends AsyncTask<Void, Double, String> {
     private ArrayList<short[]> buffers = new ArrayList<>();
     private final boolean debug = false;
     private double peak = 0;
+    
+    private volatile boolean stopFlag = false;
 
     class InputStreamWrapper implements jmodem.InputSampleStream {
 
@@ -47,6 +51,9 @@ public class Receiver extends AsyncTask<Void, Double, String> {
 
         @Override
         public double read() throws IOException {
+            if (stopFlag) {
+                throw new EOFException();
+            }
             while (offset >= size) {
                 offset = 0;
                 size = input.read(buf, 0, buf.length);
@@ -59,6 +66,10 @@ public class Receiver extends AsyncTask<Void, Double, String> {
             offset++;
             return sample;
         }
+    }
+
+    public void stop() {
+        stopFlag = true;
     }
 
     private void updatePeak(short[] buf, int size) {

@@ -4,5 +4,6 @@
     <string name="app_name">AudioModem</string>
     <string name="hello_world">Hello world!</string>
     <string name="copy_to_clip">Copy to clipboard</string>
+    <string name="menu_stop">Stop</string>
 
 </resources>
