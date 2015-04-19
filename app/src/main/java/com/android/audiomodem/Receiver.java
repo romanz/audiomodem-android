@@ -123,7 +123,9 @@ public class Receiver extends AsyncTask<Void, Double, String> {
         src.stop();
         src.release();
 
-        String str = "N/A";
+        publishProgress(0.0);
+
+        String str = "";
         try {
             str = new String(output.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
