@@ -9,27 +9,19 @@ import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ArrayBlockingQueue;
 
-import jmodem.BufferedStream;
 import jmodem.Config;
-import jmodem.InputSampleStream;
 
 /**
  * Created by roman on 2/10/15.
  */
-public class Receiver extends AsyncTask<Void, Void, String> {
+public class Receiver extends AsyncTask<Void, Double, String> {
 
     final static int sampleRate = Config.sampleRate;
 
@@ -39,13 +31,14 @@ public class Receiver extends AsyncTask<Void, Void, String> {
 
     private ArrayList<short[]> buffers = new ArrayList<>();
     private final boolean debug = false;
+    private double peak = 0;
 
     class InputStreamWrapper implements jmodem.InputSampleStream {
 
         AudioRecord input;
         short[] buf;
-        int offset;
-        int size;
+        int offset;  // next short to be read from buf
+        int size;  // number of shorts in buf
 
         public InputStreamWrapper(AudioRecord src, int bufSize) {
             input = src;
@@ -57,6 +50,7 @@ public class Receiver extends AsyncTask<Void, Void, String> {
             while (offset >= size) {
                 offset = 0;
                 size = input.read(buf, 0, buf.length);
+                updatePeak(buf, size);
                 if (debug) {
                     buffers.add(buf.clone());
                 }
@@ -65,6 +59,17 @@ public class Receiver extends AsyncTask<Void, Void, String> {
             offset++;
             return sample;
         }
+    }
+
+    private void updatePeak(short[] buf, int size) {
+        if (size <= 0) {
+            return;
+        }
+        int result = buf[0];
+        for (int i = 1; i < size; i++) {
+            result = Math.max(result, Math.abs(buf[i]));
+        }
+        publishProgress( result / Config.scalingFactor );
     }
 
     @Override
