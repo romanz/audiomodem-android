@@ -65,8 +65,8 @@ public class Receiver extends AsyncTask<Void, Double, String> {
         if (size <= 0) {
             return;
         }
-        int result = buf[0];
-        for (int i = 1; i < size; i++) {
+        int result = 0;
+        for (int i = 0; i < size; i++) {
             result = Math.max(result, Math.abs(buf[i]));
         }
         publishProgress( result / Config.scalingFactor );
