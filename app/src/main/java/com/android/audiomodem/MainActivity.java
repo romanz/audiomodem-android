@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -26,6 +28,8 @@ public class MainActivity extends ActionBarActivity {
 
     private Sender tx = null;
     private Receiver rx = null;
+    private ProgressBar pBar;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
         editText = (EditText) findViewById(R.id.editText);
         recvBtn = (ImageButton) findViewById(R.id.recvBtn);
         sendBtn = (ImageButton) findViewById(R.id.sendBtn);
+        pBar = (ProgressBar) findViewById(R.id.pBar);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -44,19 +49,40 @@ public class MainActivity extends ActionBarActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null && "text/plain".equals(type)) {
             String str = intent.getStringExtra(Intent.EXTRA_TEXT);
             editText.setText(str);
+            editText.setSelection(str.length());
         }
+
+        context = getApplicationContext();
+    }
+
+    void toast(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
     public void onReceive(View v) {
         rx = new Receiver() {
             @Override
-            protected void onPostExecute(String result) {
-                editText.setText(result);
+            protected void onPostExecute(Result res) {
+                if (res.err == null) {
+                    editText.setText(res.out);
+                    int len = res.out.length();
+                    editText.setSelection(len);
+                    toast("OK");
+                } else {
+                    toast("Error: " + res.err);
+                }
                 recvBtn.setEnabled(true);
+            }
+
+            @Override
+            protected void onProgressUpdate(Double... values) {
+                double p = values[0];
+                pBar.setProgress((int)(p * pBar.getMax()));
             }
         };
         recvBtn.setEnabled(false);
         rx.execute();
+        toast("Receiving...");
     }
 
     public void onSend(View v) {
@@ -73,8 +99,9 @@ public class MainActivity extends ActionBarActivity {
                 pBar.setProgress((int)(p * pBar.getMax()));
             }
         };
-        tx.execute(msg);
         sendBtn.setEnabled(false);
+        tx.execute(msg);
+        toast("Sending...");
     }
 
     public void onClear(View v) {

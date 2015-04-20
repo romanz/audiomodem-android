@@ -86,8 +86,9 @@ public class Sender extends AsyncTask<String, Double, Void> {
             }
         } catch (InterruptedException e) {
             // nothing to do
+        } finally {
+            publishProgress(1.0);
         }
-        publishProgress(1.0);
         dst.stop();
         dst.release();
         return null;

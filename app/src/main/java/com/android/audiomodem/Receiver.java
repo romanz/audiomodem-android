@@ -23,7 +23,7 @@ import jmodem.Config;
 /**
  * Created by roman on 2/10/15.
  */
-public class Receiver extends AsyncTask<Void, Double, String> {
+public class Receiver extends AsyncTask<Void, Double, Result> {
 
     final static int sampleRate = Config.sampleRate;
 
@@ -84,7 +84,7 @@ public class Receiver extends AsyncTask<Void, Double, String> {
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected Result doInBackground(Void... params) {
 
         int chanFormat = AudioFormat.CHANNEL_IN_MONO;
         int encoding = AudioFormat.ENCODING_PCM_16BIT;
@@ -101,12 +101,12 @@ public class Receiver extends AsyncTask<Void, Double, String> {
         DataOutputStream os = null;
         if (debug) {
             String filePath = Environment.getExternalStorageDirectory().getPath() + "/audio.raw";
-            Log.d(TAG, "file:" + filePath);
+            Log.d(TAG, "file: " + filePath);
 
             try {
                 os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filePath)));
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                Log.e(TAG, "file open failed", e);
                 os = null;
             }
         }
@@ -116,7 +116,13 @@ public class Receiver extends AsyncTask<Void, Double, String> {
             jmodem.Receiver.run(input, output);
         } catch (IOException e) {
             Log.e(TAG, "receiver failed", e);
+            return new Result(null, e.getMessage());
+        } finally {
+            src.stop();
+            src.release();
+            publishProgress(0.0);
         }
+
         if (os != null) {
             try {
                 for (short[] b : buffers) {
@@ -127,23 +133,18 @@ public class Receiver extends AsyncTask<Void, Double, String> {
                 os.flush();
                 os.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "audio save failed", e);
+                return new Result(null, e.getMessage());
             }
         }
 
-        src.stop();
-        src.release();
-
-        publishProgress(0.0);
-
-        String str = "";
         try {
-            str = new String(output.toByteArray(), "UTF-8");
+            String str = new String(output.toByteArray(), "UTF-8");
+            return new Result(str, null);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(TAG, "unicode decoding failed", e);
+            return new Result(null, e.getMessage());
         }
-        Log.d(TAG, "result: " + str);
-        return str;
     }
 }
 
