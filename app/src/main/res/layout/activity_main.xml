@@ -15,7 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -23,9 +24,9 @@
         android:id="@+id/sendBtn"
         android:src="@drawable/speaker"
         android:onClick="onSend"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
+        android:layout_below="@+id/pBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
         android:id="@+id/recvBtn"
         android:src="@drawable/microphone"
         android:onClick="onReceive"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/pBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -42,10 +43,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/pBar"
-        android:layout_alignTop="@+id/sendBtn"
-        android:layout_toRightOf="@+id/sendBtn"
-        android:layout_toLeftOf="@+id/recvBtn"
-        android:layout_toStartOf="@+id/recvBtn"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
