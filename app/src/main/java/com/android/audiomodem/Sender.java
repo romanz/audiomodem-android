@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 
-public class Sender extends AsyncTask<String, Void, Void> {
+public class Sender extends AsyncTask<String, Double, Void> {
 
     static class OutputBuffer implements jmodem.OutputSampleStream {
 
@@ -39,7 +39,6 @@ public class Sender extends AsyncTask<String, Void, Void> {
     }
 
     final static int sampleRate = jmodem.Config.sampleRate;
-    final static int duration = 10;  // in seconds
 
     final static int streamType = AudioManager.STREAM_MUSIC;
     final static String TAG = "Sender";
@@ -77,16 +76,20 @@ public class Sender extends AsyncTask<String, Void, Void> {
                 mode
         );
         int n = dst.write(samples, 0, samples.length);
-        long duration = n * 1000L / sampleRate; // [ms]
-        Log.d(TAG, String.format("playing {0} samples ({1} seconds)", n, duration / 1e3));
+        double duration = ((double) n) / sampleRate;
+        Log.d(TAG, String.format("playing %d samples (%f seconds)", n, duration));
 
         dst.play();
         try {
-            Thread.sleep(duration);
+            final double dt = 0.1;
+            for (double t = 0; t < duration; t += dt) {
+                publishProgress(t / duration);
+                Thread.sleep((long) (dt * 1000));
+            }
         } catch (InterruptedException e) {
             // nothing to do
         }
-        Log.d(TAG, "Done");
+        publishProgress(1.0);
         dst.stop();
         dst.release();
         return null;

@@ -66,6 +66,12 @@ public class MainActivity extends ActionBarActivity {
             protected void onPostExecute(Void result) {
                 sendBtn.setEnabled(true);
             }
+
+            @Override
+            protected void onProgressUpdate(Double... values) {
+                double p = values[0];
+                pBar.setProgress((int)(p * pBar.getMax()));
+            }
         };
         tx.execute(msg);
         sendBtn.setEnabled(false);
