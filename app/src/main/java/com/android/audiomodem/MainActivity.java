@@ -59,16 +59,20 @@ public class MainActivity extends ActionBarActivity {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
+    void setText(String s) {
+        editText.setText(s);
+        editText.setSelection(s.length());
+    }
+
     public void onReceive(View v) {
         rx = new Receiver() {
             @Override
             protected void onPostExecute(Result res) {
                 if (res.err == null) {
-                    editText.setText(res.out);
-                    int len = res.out.length();
-                    editText.setSelection(len);
+                    setText(res.out);
                     toast("OK");
                 } else {
+                    setText("");
                     toast("Error: " + res.err);
                 }
                 recvBtn.setEnabled(true);
@@ -104,8 +108,11 @@ public class MainActivity extends ActionBarActivity {
         toast("Sending...");
     }
 
-    public void onClear(View v) {
-        editText.setText("");
+    public void onStop(View v) {
+        setText("");
+        if (rx != null) {
+            rx.stop();
+        }
     }
 
     @Override
@@ -127,18 +134,6 @@ public class MainActivity extends ActionBarActivity {
             ClipData clip = ClipData.newPlainText("text", str);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setPrimaryClip(clip);
-            return true;
-        }
-
-        if (id == R.id.menu_clear) {
-            editText.setText("");
-            return true;
-        }
-
-        if (id == R.id.menu_stop) {
-            if (rx != null) {
-                rx.stop();
-            }
             return true;
         }
 

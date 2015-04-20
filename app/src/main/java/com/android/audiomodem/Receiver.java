@@ -52,7 +52,7 @@ public class Receiver extends AsyncTask<Void, Double, Result> {
         @Override
         public double read() throws IOException {
             if (stopFlag) {
-                throw new EOFException();
+                throw new IOException("stopped");
             }
             while (offset >= size) {
                 offset = 0;

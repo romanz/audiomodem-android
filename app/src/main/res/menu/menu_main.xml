@@ -3,8 +3,4 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/menu_copy" android:title="@string/menu_copy"
         android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/menu_clear" android:title="@string/menu_clear"
-        android:orderInCategory="101" app:showAsAction="never" />
-    <item android:id="@+id/menu_stop" android:title="@string/menu_stop"
-        android:orderInCategory="103" app:showAsAction="never" />
 </menu>
