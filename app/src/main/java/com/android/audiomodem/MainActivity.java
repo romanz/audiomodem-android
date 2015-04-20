@@ -5,22 +5,20 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
 public class MainActivity extends ActionBarActivity {
 
+    private static final String TAG = "Main";
     private EditText editText = null;
     private ImageButton recvBtn = null;
     private ImageButton sendBtn = null;
@@ -46,11 +44,20 @@ public class MainActivity extends ActionBarActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && type != null && "text/plain".equals(type)) {
-            String str = intent.getStringExtra(Intent.EXTRA_TEXT);
-            editText.setText(str);
-            editText.setSelection(str.length());
+        String str = "";
+        Log.d(TAG, "type: " + type);
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            switch (type) {
+                case "text/plain":
+                    str = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    break;
+            }
         }
+
+        Log.d(TAG, "str: " + str);
+        editText.setText(str);
+        editText.setSelection(str.length());
 
         context = getApplicationContext();
     }
@@ -124,17 +131,22 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        String str = editText.getText().toString();
 
-        if (id == R.id.menu_copy) {
-            String str = editText.getText().toString();
-            ClipData clip = ClipData.newPlainText("text", str);
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            clipboard.setPrimaryClip(clip);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menu_copy:
+                ClipData clip = ClipData.newPlainText("text", str);
+                ClipboardManager mgr = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                mgr.setPrimaryClip(clip);
+                return true;
+
+            case R.id.menu_share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, str);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
