@@ -6,6 +6,8 @@ import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -54,12 +56,8 @@ public class Sender extends AsyncTask<String, Double, Void> {
         OutputBuffer buf = new OutputBuffer();
         final byte[] data = params[0].getBytes();
 
-        jmodem.Sender send = new jmodem.Sender(buf);
         try {
-            send.writePrefix();
-            send.writeTraining();
-            send.writeData(data, data.length);
-            send.writeEOF();
+            jmodem.Sender.run(new ByteArrayInputStream(data), buf);
         } catch (IOException e) {
             Log.e(TAG, "sending data failed", e);
             return null;
