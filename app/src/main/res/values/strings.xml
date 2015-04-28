@@ -4,5 +4,6 @@
     <string name="app_name">Audio MODEM</string>
     <string name="menu_copy">Copy to clipboard</string>
     <string name="menu_share">Share...</string>
+    <string name="menu_about">About</string>
 
 </resources>

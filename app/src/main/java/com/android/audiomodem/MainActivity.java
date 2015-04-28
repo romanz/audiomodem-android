@@ -147,6 +147,10 @@ public class MainActivity extends ActionBarActivity {
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;
+
+            case R.id.menu_about:
+                toast("Written by Roman Zeyde\n(roman.zeyde@gmail.com)");
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

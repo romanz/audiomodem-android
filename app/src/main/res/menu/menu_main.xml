@@ -5,4 +5,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/menu_share" android:title="@string/menu_share"
         android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/menu_about" android:title="@string/menu_about"
+        android:orderInCategory="102" app:showAsAction="never" />
 </menu>
