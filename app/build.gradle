@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.android.audiomodem"
+        applicationId "bit.zeyde.audiomodem"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1

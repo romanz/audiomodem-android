@@ -1,4 +1,4 @@
-package com.android.audiomodem;
+package bit.zeyde.audiomodem;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;

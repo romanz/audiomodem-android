@@ -1,4 +1,4 @@
-package com.android.audiomodem;
+package bit.zeyde.audiomodem;
 
 /**
  * Created by roman on 5/1/15.

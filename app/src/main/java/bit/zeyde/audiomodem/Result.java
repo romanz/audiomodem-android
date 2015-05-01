@@ -1,4 +1,4 @@
-package com.android.audiomodem;
+package bit.zeyde.audiomodem;
 
 public class Result {
     public final String out;
