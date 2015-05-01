@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import jmodem.Config;
-
 /**
  * Created by roman on 2/10/15.
  */
@@ -113,7 +111,7 @@ public class Receiver extends AsyncTask<Void, Double, Result> {
 
         src.startRecording();
         try {
-            jmodem.Receiver.run(input, output);
+            jmodem.Main.receive(input, output);
         } catch (IOException e) {
             Log.e(TAG, "receiver failed", e);
             return new Result(null, e.getMessage());

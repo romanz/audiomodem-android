@@ -28,7 +28,7 @@ public class Sender extends AsyncTask<String, Double, Void> {
 
         @Override
         public void write(double value) throws IOException {
-            short sample = (short) (jmodem.Config.scalingFactor * value);
+            short sample = (short) (Config.scalingFactor * value);
             stream.writeShort(sample);
         }
 
@@ -40,7 +40,7 @@ public class Sender extends AsyncTask<String, Double, Void> {
         }
     }
 
-    final static int sampleRate = jmodem.Config.sampleRate;
+    final static int sampleRate = Config.sampleRate;
 
     final static int streamType = AudioManager.STREAM_MUSIC;
     final static String TAG = "Sender";
@@ -57,7 +57,7 @@ public class Sender extends AsyncTask<String, Double, Void> {
         final byte[] data = params[0].getBytes();
 
         try {
-            jmodem.Sender.run(new ByteArrayInputStream(data), buf);
+            jmodem.Main.send(new ByteArrayInputStream(data), buf);
         } catch (IOException e) {
             Log.e(TAG, "sending data failed", e);
             return null;
